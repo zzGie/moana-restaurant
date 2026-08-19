@@ -57,7 +57,7 @@
     align-items:center;
     gap: 6px;
     padding: 10px 12px;
-    background: rgba(28,48,42,0.72);
+    background: rgba(18,33,27,0.94);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(244,237,224,0.12);
@@ -66,6 +66,18 @@
     transition: opacity .35s ease, transform .35s ease;
     max-width: 92vw;
   }
+
+  /* Fades whatever scrolls up underneath the fixed pill nav, so images
+     disappear smoothly instead of getting hard-clipped by the nav. */
+  .top-fade{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 118px;
+    z-index: 40;
+    pointer-events: none;
+    background: linear-gradient(to bottom, var(--ink) 0%, rgba(18,33,27,0.85) 45%, transparent 100%);
+  }
+  @media (max-width: 480px){ .top-fade{ height: 100px; } }
   #siteNav .pill-brand{
     font-family:'Cormorant Garamond', serif;
     font-style: italic;
@@ -163,7 +175,7 @@
     flex-direction: column;
     align-items:center;
     justify-content:center;
-    padding: 120px 6vw 50px;
+    padding: 136px 6vw 50px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -178,7 +190,7 @@
   }
 
   @media (max-width: 480px){
-    .view{ padding: 104px 6vw 40px; }
+    .view{ padding: 116px 6vw 40px; }
   }
 
   /* ---------- HOME VIEW ---------- */
@@ -286,6 +298,7 @@
   /* ---------- CATEGORY VIEW ---------- */
   .cat-head{
     text-align:center;
+    margin-top: 6px;
     margin-bottom: 44px;
   }
   .cat-head .eyebrow{
@@ -460,6 +473,7 @@
 <body>
 
 <div class="grain"></div>
+<div class="top-fade"></div>
 
 <nav id="siteNav">
   <button class="pill-brand" data-view="home">Moana <span>Restaurant</span></button>
