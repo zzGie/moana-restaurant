@@ -174,7 +174,11 @@
     display:flex;
     flex-direction: column;
     align-items:center;
-    justify-content:center;
+    justify-content: flex-start; /* NEVER center: a centered flex container
+      splits overflow evenly above/below, pushing content off the top into
+      space that can't be scrolled back into. flex-start + auto margins on
+      .view-inner below gives the same centered look when content fits,
+      and safely falls back to top-aligned + fully scrollable when it doesn't. */
     padding: 136px 6vw 50px;
     opacity: 0;
     visibility: hidden;
@@ -187,6 +191,14 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+  .view-inner{
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto 0; /* centers vertically only when there's spare room;
+      collapses to 0 (top-aligned) the moment content overflows */
   }
 
   @media (max-width: 480px){
@@ -490,6 +502,7 @@
 
 <!-- HOME VIEW: fixed, never scrolls the page (the view itself scrolls if content is tall) -->
 <section class="view active" id="view-home">
+ <div class="view-inner">
   <div class="hero-brand">Moana <span>Restaurant</span></div>
   <div class="hero-eyebrow">The Full Menu</div>
   <h1>Every dish has its <em>own</em> story to tell.</h1>
@@ -520,10 +533,12 @@
     <span class="c-divider"></span>
     <span class="c-hours">Open Daily · 11:00–22:00</span>
   </div>
+ </div>
 </section>
 
 <!-- APPETIZERS VIEW -->
 <section class="view" id="view-appetizers">
+ <div class="view-inner">
   <div class="cat-head">
     <div class="eyebrow">Course I</div>
     <h2>Appetizers</h2>
@@ -560,10 +575,12 @@
   <div class="view-foot">
     <button data-view="home">&larr; Back to Home</button>
   </div>
+ </div>
 </section>
 
 <!-- MAINS VIEW -->
 <section class="view" id="view-mains">
+ <div class="view-inner">
   <div class="cat-head">
     <div class="eyebrow">Course II</div>
     <h2>Main Course</h2>
@@ -600,10 +617,12 @@
   <div class="view-foot">
     <button data-view="home">&larr; Back to Home</button>
   </div>
+ </div>
 </section>
 
 <!-- DRINKS VIEW -->
 <section class="view" id="view-drinks">
+ <div class="view-inner">
   <div class="cat-head">
     <div class="eyebrow">Course III</div>
     <h2>Beverages</h2>
@@ -640,10 +659,12 @@
   <div class="view-foot">
     <button data-view="home">&larr; Back to Home</button>
   </div>
+ </div>
 </section>
 
 <!-- DESSERTS VIEW -->
 <section class="view" id="view-desserts">
+ <div class="view-inner">
   <div class="cat-head">
     <div class="eyebrow">Course IV</div>
     <h2>Desserts</h2>
@@ -680,6 +701,7 @@
   <div class="view-foot">
     <button data-view="home">&larr; Back to Home</button>
   </div>
+ </div>
 </section>
 
 <script>
