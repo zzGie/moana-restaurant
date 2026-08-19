@@ -64,6 +64,7 @@
     border-radius: 999px;
     box-shadow: 0 18px 40px -18px rgba(0,0,0,0.6);
     transition: opacity .35s ease, transform .35s ease;
+    max-width: 92vw;
   }
   #siteNav .pill-brand{
     font-family:'Cormorant Garamond', serif;
@@ -103,12 +104,58 @@
     color: var(--ink);
     background: var(--brass);
   }
-  @media (max-width: 760px){ #siteNav .pill-links{ display:none; } }
+
+  /* Mobile hamburger — hidden on desktop, shown under 760px */
+  .pill-menu-btn{
+    display: none;
+    align-items:center;
+    justify-content:center;
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: transparent;
+    color: var(--ivory);
+    flex-shrink: 0;
+  }
+  .pill-menu-btn svg{ width: 18px; height: 18px; }
+
+  @media (max-width: 760px){
+    #siteNav .pill-links{
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+      min-width: 190px;
+      background: rgba(28,48,42,0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(244,237,224,0.14);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 18px 40px -18px rgba(0,0,0,0.7);
+    }
+    #siteNav.menu-open .pill-links{ display: flex; }
+    #siteNav .pill-links button{
+      text-align: center;
+      padding: 12px 14px;
+      border-radius: 10px;
+    }
+    .pill-menu-btn{ display: flex; }
+  }
+
+  @media (max-width: 380px){
+    #siteNav{ top: 16px; padding: 8px 10px; }
+    #siteNav .pill-brand{ font-size: 0.86rem; }
+  }
 
   /* ---------- VIEW SWITCHER ---------- */
-  /* Only one .view is visible at a time. Nothing here causes page scroll;
-     each view fills the screen exactly. If a view's own content is ever
-     taller than the screen, that single view (not the page) scrolls. */
+  /* Only one .view is visible at a time. Each view fills the screen; if a
+     view's own content is taller than the screen, that single view (not
+     the page) scrolls. */
   .view{
     position: fixed;
     inset: 0;
@@ -122,11 +169,16 @@
     pointer-events: none;
     transition: opacity .45s ease;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .view.active{
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+
+  @media (max-width: 480px){
+    .view{ padding: 104px 6vw 40px; }
   }
 
   /* ---------- HOME VIEW ---------- */
@@ -158,8 +210,8 @@
   #view-home h1{
     font-family:'Cormorant Garamond', serif;
     font-weight: 500;
-    font-size: clamp(2.4rem, 7vw, 5.6rem);
-    line-height: 1.04;
+    font-size: clamp(2.2rem, 7vw, 5.6rem);
+    line-height: 1.08;
     margin: 0;
     max-width: 15ch;
   }
@@ -220,11 +272,16 @@
     color: var(--ivory-dim);
     background: transparent;
     border: 1px solid rgba(244,237,224,0.18);
-    padding: 9px 16px;
+    padding: 10px 16px;
     border-radius: 20px;
     transition: border-color .3s ease, color .3s ease;
   }
   .hero-quicklinks button:hover{ border-color: var(--brass); color: var(--ivory); }
+
+  @media (max-width: 480px){
+    .hero-cta{ margin-top: 30px; }
+    .hero-quicklinks{ margin-top: 34px; }
+  }
 
   /* ---------- CATEGORY VIEW ---------- */
   .cat-head{
@@ -242,8 +299,12 @@
     font-family:'Cormorant Garamond', serif;
     font-weight: 500;
     font-style: italic;
-    font-size: clamp(2rem, 4.6vw, 3.1rem);
+    font-size: clamp(1.8rem, 4.6vw, 3.1rem);
     margin: 14px 0 0;
+  }
+
+  @media (max-width: 480px){
+    .cat-head{ margin-bottom: 32px; }
   }
 
   .dish-grid{
@@ -254,7 +315,10 @@
     width: 100%;
   }
   @media (max-width: 860px){
-    .dish-grid{ grid-template-columns: 1fr; max-width: 480px; gap: 26px; }
+    .dish-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 640px; gap: 26px; }
+  }
+  @media (max-width: 560px){
+    .dish-grid{ grid-template-columns: 1fr; max-width: 420px; gap: 30px; }
   }
 
   .dish-card{
@@ -262,6 +326,7 @@
     flex-direction: column;
     align-items:center;
     text-align:center;
+    min-width: 0;
   }
   .dish-card .thumb{
     position: relative;
@@ -327,15 +392,17 @@
     display:flex;
     align-items:center;
     gap: 8px;
+    padding: 10px 6px;
     transition: color .3s ease;
   }
   .view-foot button:hover{ color: var(--brass); }
 
-  /* ---------- HOME CONTACT BAR ---------- */
+  /* ---------- HOME CONTACT BAR ----------
+     Part of normal document flow (not pinned/absolute) so it can never
+     overlap the hero content on short or narrow screens — it simply
+     stacks below the quicklinks, and the view scrolls if needed. */
   .home-contact{
-    position: absolute;
-    left: 0; right: 0;
-    bottom: 30px;
+    margin-top: 50px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -375,7 +442,7 @@
     white-space: nowrap;
   }
   @media (max-width: 560px){
-    .home-contact{ bottom: 18px; gap: 10px; }
+    .home-contact{ margin-top: 36px; gap: 10px; }
     .home-contact .c-divider{ display:none; }
     .home-contact .c-hours{ width: 100%; text-align:center; order: 5; margin-top: 6px; }
   }
@@ -402,9 +469,12 @@
     <li><button data-view="drinks">Drinks</button></li>
     <li><button data-view="desserts">Desserts</button></li>
   </ul>
+  <button class="pill-menu-btn" id="pillMenuBtn" aria-label="Open navigation menu" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+  </button>
 </nav>
 
-<!-- HOME VIEW: fixed, never scrolls -->
+<!-- HOME VIEW: fixed, never scrolls the page (the view itself scrolls if content is tall) -->
 <section class="view active" id="view-home">
   <div class="hero-brand">Moana <span>Restaurant</span></div>
   <div class="hero-eyebrow">The Full Menu</div>
@@ -599,21 +669,36 @@
 </section>
 
 <script>
+  const siteNav = document.getElementById('siteNav');
+  const pillMenuBtn = document.getElementById('pillMenuBtn');
   const views = document.querySelectorAll('.view');
   const navButtons = document.querySelectorAll('#siteNav [data-view]');
 
   function showView(name){
     views.forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
     navButtons.forEach(b => b.classList.toggle('current', b.dataset.view === name));
-    // reset scroll position of the view being shown (in case it ever needs its own scroll)
+    // reset scroll position of the view being shown
     const target = document.getElementById('view-' + name);
     if (target) target.scrollTop = 0;
     history.replaceState(null, '', '#' + name);
+    siteNav.classList.remove('menu-open');
+    pillMenuBtn.setAttribute('aria-expanded', 'false');
   }
 
   // Wire up every clickable element with a data-view attribute
   document.querySelectorAll('[data-view]').forEach(el => {
     el.addEventListener('click', () => showView(el.dataset.view));
+  });
+
+  // Mobile hamburger toggle for the pill nav links (shows under 760px)
+  pillMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = siteNav.classList.toggle('menu-open');
+    pillMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  // Close it if you tap outside
+  document.addEventListener('click', (e) => {
+    if (!siteNav.contains(e.target)) siteNav.classList.remove('menu-open');
   });
 
   // Open the right view on load (supports direct links like page.html#mains)
